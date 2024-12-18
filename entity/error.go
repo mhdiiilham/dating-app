@@ -2,7 +2,7 @@ package entity
 
 import "errors"
 
-// ErrInternalServerError var ...
+// ErrInternalServerError is used when a progammatic error occurs.
 var ErrInternalServerError = errors.New("INTERNAL_ERROR")
 
 // Authentication related error.
