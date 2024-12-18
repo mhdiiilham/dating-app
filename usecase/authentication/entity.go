@@ -8,8 +8,9 @@ type SignUpRequest struct {
 	Password  string
 }
 
-// SignUpResponse struct hold the data definition when signing up an user is success.
-type SignUpResponse struct {
+// AccessResponse struct hold the data definition when signing up an user is success.
+// TODO: need to refactor struct name!!!
+type AccessResponse struct {
 	ID          string
 	Email       string
 	AccessToken string

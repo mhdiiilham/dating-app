@@ -41,7 +41,7 @@ func (suite *authenticationTestSuite) TestSignUp() {
 		condition   string
 		request     SignUpRequest
 		doMock      func(mockUserRepository *authenticatormock.MockUserRepository, mockJwtClient *authenticatormock.MockJwtGenerator, mockHasher *authenticatormock.MockHasher)
-		expected    *SignUpResponse
+		expected    *AccessResponse
 		expectedErr error
 	}{
 		{
@@ -119,7 +119,7 @@ func (suite *authenticationTestSuite) TestSignUp() {
 				}).Return("1", nil).Times(1)
 				mockJwtClient.EXPECT().CreateAccessToken("1", "hi@muhammadilham.xyz").Return(mockAccessToken, nil).Times(1)
 			},
-			expected: &SignUpResponse{
+			expected: &AccessResponse{
 				ID:          "1",
 				Email:       "hi@muhammadilham.xyz",
 				AccessToken: mockAccessToken,
@@ -200,6 +200,100 @@ func (suite *authenticationTestSuite) TestSignUp() {
 			actual, actualErr := authenticator.SignUp(context.Background(), tc.request)
 			assertion.Equal(tc.expected, actual)
 			assertion.Equal(tc.expectedErr, actualErr)
+		})
+	}
+}
+
+func (suite *authenticationTestSuite) TestSignIn() {
+	testCases := []struct {
+		condition       string
+		email, password string
+		doMock          func(userRepository *authenticatormock.MockUserRepository, jwtGeneratorMock *authenticatormock.MockJwtGenerator, passwordHasher *authenticatormock.MockHasher)
+		expected        *AccessResponse
+		expectedErr     error
+	}{
+		{
+			condition: "invalid email",
+			email:     "invalid email",
+			password:  "plain password",
+			doMock: func(userRepository *authenticatormock.MockUserRepository, jwtGeneratorMock *authenticatormock.MockJwtGenerator, passwordHasher *authenticatormock.MockHasher) {
+			},
+			expected:    nil,
+			expectedErr: entity.ErrInvalidEmailAddress,
+		},
+		{
+			condition: "user not found",
+			email:     "hi@muhammadilham.xyz",
+			password:  "HelloWorlds",
+			doMock: func(userRepository *authenticatormock.MockUserRepository, jwtGeneratorMock *authenticatormock.MockJwtGenerator, passwordHasher *authenticatormock.MockHasher) {
+				userRepository.
+					EXPECT().
+					GetByEmail(gomock.Any(), "hi@muhammadilham.xyz").
+					Return(nil, nil).
+					Times(1)
+			},
+			expected:    nil,
+			expectedErr: entity.ErrUserDoesNotExist,
+		},
+		{
+			condition: "invalid password",
+			email:     "hi@muhammadilham.xyz",
+			password:  "HelloWorldsButHashed",
+			doMock: func(userRepository *authenticatormock.MockUserRepository, jwtGeneratorMock *authenticatormock.MockJwtGenerator, passwordHasher *authenticatormock.MockHasher) {
+				userRepository.
+					EXPECT().
+					GetByEmail(gomock.Any(), "hi@muhammadilham.xyz").
+					Return(&entity.User{ID: "1", FirstName: "Muhammad", LastName: "Ilham", Email: "hi@muhammadilham.xyz", Password: "HashedPassword"}, nil).
+					Times(1)
+
+				passwordHasher.
+					EXPECT().
+					ComparePassword("HelloWorldsButHashed", "HashedPassword").
+					Return(false).
+					Times(1)
+			},
+			expected:    nil,
+			expectedErr: entity.ErrInvalidUserEmailAndPasswordCombination,
+		},
+		{
+			condition: "success",
+			email:     "hi@muhammadilham.xyz",
+			password:  "HelloWorldsButHashed",
+			doMock: func(userRepository *authenticatormock.MockUserRepository, jwtGeneratorMock *authenticatormock.MockJwtGenerator, passwordHasher *authenticatormock.MockHasher) {
+				userRepository.
+					EXPECT().
+					GetByEmail(gomock.Any(), "hi@muhammadilham.xyz").
+					Return(&entity.User{ID: "1", FirstName: "Muhammad", LastName: "Ilham", Email: "hi@muhammadilham.xyz", Password: "HashedPassword"}, nil).
+					Times(1)
+
+				passwordHasher.
+					EXPECT().
+					ComparePassword("HelloWorldsButHashed", "HashedPassword").
+					Return(true).
+					Times(1)
+
+				jwtGeneratorMock.
+					EXPECT().
+					CreateAccessToken("1", "hi@muhammadilham.xyz").
+					Return(mockAccessToken, nil).
+					Times(1)
+			},
+			expected:    &AccessResponse{ID: "1", Email: "hi@muhammadilham.xyz", AccessToken: mockAccessToken},
+			expectedErr: nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		suite.T().Run(tc.condition, func(t *testing.T) {
+			assert := assert.New(t)
+			ctx := context.Background()
+
+			tc.doMock(suite.mockUserRepository, suite.mockJwtClient, suite.mockPasswordHasher)
+			service := NewService(suite.mockUserRepository, suite.mockJwtClient, suite.mockPasswordHasher)
+			actual, actualErr := service.SignIn(ctx, tc.email, tc.password)
+			assert.Equal(tc.expected, actual)
+			assert.Equal(tc.expectedErr, actualErr)
+
 		})
 	}
 }

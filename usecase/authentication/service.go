@@ -44,8 +44,8 @@ func NewService(userRepository UserRepository, jwtClient JwtGenerator, passwordH
 	}
 }
 
-// SignUp function
-func (s *Service) SignUp(ctx context.Context, request SignUpRequest) (credential *SignUpResponse, err error) {
+// SignUp function ...
+func (s *Service) SignUp(ctx context.Context, request SignUpRequest) (credential *AccessResponse, err error) {
 	if _, err = mail.ParseAddress(request.Email); err != nil {
 		return nil, entity.ErrInvalidEmailAddress
 	}
@@ -82,13 +82,41 @@ func (s *Service) SignUp(ctx context.Context, request SignUpRequest) (credential
 	user.ID = userID
 	accessToken, err := s.jwtClient.CreateAccessToken(user.ID, user.Email)
 	if err != nil {
-		log.Warnf("[Authenticaion.SignUp] failed to save user: %v", err)
+		log.Warnf("[Authenticaion.SignUp] Unexpected error: %v", err)
 		return nil, entity.ErrInternalServerError
 	}
 
-	return &SignUpResponse{
+	return &AccessResponse{
 		ID:          user.ID,
 		Email:       user.Email,
+		AccessToken: accessToken,
+	}, nil
+}
+
+// SignIn function ...
+func (s *Service) SignIn(ctx context.Context, email, password string) (*AccessResponse, error) {
+	if _, err := mail.ParseAddress(email); err != nil {
+		return nil, entity.ErrInvalidEmailAddress
+	}
+
+	targetUser, err := s.userRepository.GetByEmail(ctx, email)
+	if err != nil {
+		log.Warnf("[Authenticaion.SignIn] Unexpected error: %v", err)
+		return nil, entity.ErrInternalServerError
+	}
+
+	if targetUser == nil {
+		return nil, entity.ErrUserDoesNotExist
+	}
+
+	if !s.passwordHaser.ComparePassword(password, targetUser.Password) {
+		return nil, entity.ErrInvalidUserEmailAndPasswordCombination
+	}
+
+	accessToken, _ := s.jwtClient.CreateAccessToken(targetUser.ID, targetUser.Email)
+	return &AccessResponse{
+		ID:          targetUser.ID,
+		Email:       targetUser.Email,
 		AccessToken: accessToken,
 	}, nil
 }
