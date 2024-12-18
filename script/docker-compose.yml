@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12
+    container_name: dating
+    environment:
+      - POSTGRES_USER=oca
+      - POSTGRES_PASSWORD=hanidaalya
+      - POSTGRES_DB=dating
+    ports:
+      - 25432:5432
+    volumes:
+      - ./xdata/pgsql:/var/lib/postgresql/data
+    restart: always
+
