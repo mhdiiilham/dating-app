@@ -12,7 +12,7 @@ import (
 
 // Query use in UserRepository.
 var (
-	UserFindByEmail = `SELECT id, first_name, last_name, email, password from users where email = $1 LIMIT 1;`
+	UserFindByEmail = `SELECT id, first_name, last_name, email, password, created_at, updated_at, deleted_at from users where email = $1 LIMIT 1;`
 	UserSave        = `INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING "id";`
 )
 
