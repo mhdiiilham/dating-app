@@ -10,7 +10,6 @@ import (
 
 // Configuration holds the data required by the application to run.
 type Configuration struct {
-	Version    string `mapstructure:"VERSION"`
 	Port       int    `mapstructure:"PORT"`
 	AppName    string `mapstructure:"APP_NAME"`
 	JWTSecret  string `mapstructure:"JWT_SECRET"`

@@ -19,11 +19,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var version = "v0.0.0"
+
 func main() {
 	log.SetFormatter(&log.TextFormatter{DisableColors: true, FullTimestamp: true})
 
 	config := common.ReadConfig()
-	log.Infof("read configuration success. version: %s", config.Version)
+	log.Infof("read configuration success. version: %s", version)
 
 	dbConn := common.ConnectDb(config)
 
