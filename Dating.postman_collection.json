@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "d415803f-cefb-4dca-823c-e88a47e36d6a",
+		"name": "Dating",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9584176"
+	},
+	"item": [
+		{
+			"name": "Sign Up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fist_name\": \"Muhamad\",\n    \"last_name\": \"Ilham\",\n    \"email\": \"hiiss@muhammadilham.xyz\",\n    \"password\": \"HelloWorld!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/authentications/signup",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"authentications",
+						"signup"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fist_name\": \"Muhamad\",\n    \"last_name\": \"Ilham\",\n    \"email\": \"hiiss@muhammadilham.xyz\",\n    \"password\": \"HelloWorld!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/v1/authentications/signup",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"authentications",
+								"signup"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 19 Dec 2024 13:10:42 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "307"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 201,\n    \"message\": \"signup success\",\n    \"data\": {\n        \"id\": \"4\",\n        \"email\": \"hiiss@muhammadilham.xyz\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ2MjEwNDIsImlzcyI6ImRhdGluZyIsImlkIjoiNCIsImVtYWlsIjoiaGlpc3NAbXVoYW1tYWRpbGhhbS54eXoifQ.9a2pz93ACg7OeLBO7qVY_jDZrhc1QHNl8KplReWyrpI\"\n    },\n    \"error\": null\n}"
+				},
+				{
+					"name": "User Existed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fist_name\": \"Muhamad\",\n    \"last_name\": \"Ilham\",\n    \"email\": \"hi@muhammadilham.xyz\",\n    \"password\": \"HelloWorld!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/v1/authentications/signup",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"authentications",
+								"signup"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 19 Dec 2024 13:11:13 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "63"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 400,\n    \"message\": \"USER_EXISTED\",\n    \"data\": null,\n    \"error\": {}\n}"
+				},
+				{
+					"name": "Invalid Email Address",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fist_name\": \"Muhamad\",\n    \"last_name\": \"Ilham\",\n    \"email\": \"sjfhdsalkjfas\",\n    \"password\": \"HelloWorld!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/v1/authentications/signup",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"authentications",
+								"signup"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 19 Dec 2024 13:11:25 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "72"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 400,\n    \"message\": \"INVALID_EMAIL_ADDRESS\",\n    \"data\": null,\n    \"error\": {}\n}"
+				}
+			]
+		},
+		{
+			"name": "Sign In",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"hi@muhammadilham.xyz\",\n    \"password\": \"HelloWorld!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/authentications/signin",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"authentications",
+						"signin"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hi@muhammadilham.xyz\",\n    \"password\": \"HelloWorld!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/v1/authentications/signin",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"authentications",
+								"signin"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 19 Dec 2024 13:17:27 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "302"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 200,\n    \"message\": \"Sign-In Success\",\n    \"data\": {\n        \"id\": \"1\",\n        \"email\": \"hi@muhammadilham.xyz\",\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ2MjE0NDcsImlzcyI6ImRhdGluZyIsImlkIjoiMSIsImVtYWlsIjoiaGlAbXVoYW1tYWRpbGhhbS54eXoifQ.LfoHRjULfSGCLIOWDAJiwWRh1Wzt4xenZtxCLVOV_MI\"\n    },\n    \"error\": null\n}"
+				},
+				{
+					"name": "Wrong Password",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hi@muhammadilham.xyz\",\n    \"password\": \"HelloWorld!!!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/v1/authentications/signin",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"authentications",
+								"signin"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 19 Dec 2024 13:17:48 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "85"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 400,\n    \"message\": \"INVALID_EMAIL_PASSWORD_COMBINATION\",\n    \"data\": null,\n    \"error\": {}\n}"
+				},
+				{
+					"name": "User Does Not Exist",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hi@muhammadilham.xyzd\",\n    \"password\": \"HelloWorld!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/v1/authentications/signin",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"authentications",
+								"signin"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 19 Dec 2024 13:18:06 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "70"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 400,\n    \"message\": \"USER_DOES_NOT_EXIST\",\n    \"data\": null,\n    \"error\": {}\n}"
+				}
+			]
+		}
+	]
+}

@@ -11,9 +11,9 @@ type SignUpRequest struct {
 // AccessResponse struct hold the data definition when signing up an user is success.
 // TODO: need to refactor struct name!!!
 type AccessResponse struct {
-	ID          string
-	Email       string
-	AccessToken string
+	ID          string `json:"id"`
+	Email       string `json:"email"`
+	AccessToken string `json:"access_token"`
 }
 
 // Credential struct holds the data definition required for a user to sign-in.

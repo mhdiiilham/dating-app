@@ -32,15 +32,15 @@ type Hasher interface {
 type Service struct {
 	userRepository UserRepository
 	jwtClient      JwtGenerator
-	passwordHaser  Hasher
+	passwordHasher Hasher
 }
 
 // NewService function return new instance of Authenticator service.
-func NewService(userRepository UserRepository, jwtClient JwtGenerator, passwordHaser Hasher) *Service {
+func NewService(userRepository UserRepository, jwtClient JwtGenerator, passwordHasher Hasher) *Service {
 	return &Service{
 		userRepository: userRepository,
 		jwtClient:      jwtClient,
-		passwordHaser:  passwordHaser,
+		passwordHasher: passwordHasher,
 	}
 }
 
@@ -60,7 +60,7 @@ func (s *Service) SignUp(ctx context.Context, request SignUpRequest) (credential
 		return nil, entity.ErrUserAlreadyExist
 	}
 
-	hashedPassword, err := s.passwordHaser.HashPassword(request.Password)
+	hashedPassword, err := s.passwordHasher.HashPassword(request.Password)
 	if err != nil {
 		logrus.Warnf("[Authenticaion.SignUp] failed to hash password: %v", err)
 		return nil, entity.ErrInternalServerError
@@ -109,7 +109,7 @@ func (s *Service) SignIn(ctx context.Context, email, password string) (*AccessRe
 		return nil, entity.ErrUserDoesNotExist
 	}
 
-	if !s.passwordHaser.ComparePassword(password, targetUser.Password) {
+	if !s.passwordHasher.ComparePassword(password, targetUser.Password) {
 		return nil, entity.ErrInvalidUserEmailAndPasswordCombination
 	}
 

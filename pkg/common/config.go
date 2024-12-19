@@ -12,6 +12,8 @@ import (
 type Configuration struct {
 	Version    string `mapstructure:"VERSION"`
 	Port       int    `mapstructure:"PORT"`
+	AppName    string `mapstructure:"APP_NAME"`
+	JWTSecret  string `mapstructure:"JWT_SECRET"`
 	DBHost     string `mapstructure:"DB_HOST"`
 	DBPort     string `mapstructure:"DB_PORT"`
 	DBUser     string `mapstructure:"DB_USER"`
