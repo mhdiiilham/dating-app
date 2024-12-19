@@ -1,5 +1,8 @@
 .PHONY: 
 
+run:
+	go run cmd/restful/main.go
+
 test:
 	go test ./... -cover -v
 
