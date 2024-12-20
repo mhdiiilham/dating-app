@@ -44,8 +44,8 @@ jobs:
       - name: Run Pending Migration(s)
         run: migrate -database ${{ secrets.POSTGRESQL_URL }} -path migrations  up
 
-  deployment:
-    name: Deployment
+  build:
+    name: "Build and push image"
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     needs: [init, migration]
@@ -82,6 +82,40 @@ jobs:
         run: |-
           docker build -t gcr.io/${{ vars.GCP_PROJECT_ID }}/dating:${{ github.ref_name }} --build-arg VERSION=${{ github.ref_name }} .
           docker push gcr.io/${{ vars.GCP_PROJECT_ID }}/dating:${{ github.ref_name }}
+
+  deployment:
+    name: Deployment
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create app.env File
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_APP_NAME: dating
+          envkey_PORT: ${{ vars.PORT }}
+          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          envkey_DB_HOST: ${{ vars.DB_HOST }}
+          envkey_DB_PORT: ${{ vars.DB_PORT }}
+          envkey_DB_USER: ${{ vars.DB_USER }}
+          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          envkey_DB_SSLMODE: ${{ vars.DB_SSLMODE }}
+          envkey_DB_NAME: dating
+          file_name: app.env
+          fail_on_empty: false
+
+      - name: Setup Cloud cli
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Authorize Docker push
+        run: gcloud auth configure-docker
 
       - name: Deploy to Cloud Run
         id: gohibeesh
