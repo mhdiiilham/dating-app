@@ -57,13 +57,13 @@ jobs:
         uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_APP_NAME: dating
-          envkey_PORT: ${{ secrets.PORT }}
+          envkey_PORT: ${{ vars.PORT }}
           envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          envkey_DB_HOST: ${{ secrets.DB_HOST }}
-          envkey_DB_PORT: ${{ secrets.DB_PORT }}
-          envkey_DB_USER: ${{ secrets.DB_USER }}
+          envkey_DB_HOST: ${{ vars.DB_HOST }}
+          envkey_DB_PORT: ${{ vars.DB_PORT }}
+          envkey_DB_USER: ${{ vars.DB_USER }}
           envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          envkey_DB_SSLMODE: ${{ secrets.DB_SSLMODE }}
+          envkey_DB_SSLMODE: ${{ vars.DB_SSLMODE }}
           envkey_DB_NAME: dating
           file_name: app.env
           fail_on_empty: false
@@ -71,7 +71,7 @@ jobs:
       - name: Setup Cloud cli
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: ${{ vars.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
@@ -80,16 +80,15 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/dating:${{ github.ref_name }} --build-arg VERSION=${{ github.ref_name }} .
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/dating:${{ github.ref_name }}
-
+          docker build -t gcr.io/${{ vars.GCP_PROJECT_ID }}/dating:${{ github.ref_name }} --build-arg VERSION=${{ github.ref_name }} .
+          docker push gcr.io/${{ vars.GCP_PROJECT_ID }}/dating:${{ github.ref_name }}
 
       - name: Deploy to Cloud Run
         id: gohibeesh
         uses: google-github-actions/deploy-cloudrun@v1
         with:
           service: dating-app
-          image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/dating:${{ github.ref_name }}
+          image: gcr.io/${{ vars.GCP_PROJECT_ID }}/dating:${{ github.ref_name }}
           region: us-west1
 
       - name: Show Output
